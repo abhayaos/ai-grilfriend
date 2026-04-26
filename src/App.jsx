@@ -1,122 +1,135 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { motion } from "framer-motion";
+import toast, { Toaster } from "react-hot-toast";
+import { useState, useEffect } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function ComingSoon() {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  // Load saved email (UX boost)
+  useEffect(() => {
+    const saved = localStorage.getItem("notify_email");
+    if (saved) {
+      setSubscribed(true);
+    }
+  }, []);
+
+  const handleNotify = () => {
+    if (!email) {
+      toast.error("Enter your email first 😅");
+      return;
+    }
+
+    // simple email check
+    if (!email.includes("@")) {
+      toast.error("Invalid email bro 💀");
+      return;
+    }
+
+    // save locally (fake subscription)
+    localStorage.setItem("notify_email", email);
+
+    setSubscribed(true);
+    setEmail("");
+
+    toast("We’ll notify you 🚀", {
+      icon: "🔔",
+      style: {
+        borderRadius: "12px",
+        background: "#111",
+        color: "#fff",
+      },
+    });
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+    <div className="min-h-screen bg-[#fafafa] text-[#111] flex items-center justify-center px-6">
+      
+      {/* TOASTER */}
+      <Toaster position="top-center" />
+
+      <div className="text-center max-w-xl w-full">
+
+        {/* LOGO */}
+        <motion.h1
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-5xl font-semibold tracking-tight"
         >
-          Count is {count}
-        </button>
-      </section>
+          BuddhiManab AI
+        </motion.h1>
 
-      <div className="ticks"></div>
+        {/* TAGLINE */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mt-4 text-gray-500 text-base md:text-lg"
+        >
+          A calm and intelligent place for discovering AI tools.
+        </motion.p>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* BADGE */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-6 inline-block px-4 py-1.5 text-sm bg-gray-200 text-gray-700 rounded-full"
+        >
+          Coming Soon ✨
+        </motion.div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {/* INPUT + BUTTON */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="mt-10 flex flex-col sm:flex-row gap-3"
+        >
+          <input
+            type="email"
+            value={email}
+            disabled={subscribed}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            className="flex-1 px-4 py-3 rounded-xl border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-gray-200 transition disabled:opacity-60"
+          />
+
+          <button
+            onClick={handleNotify}
+            disabled={subscribed}
+            className={`px-6 py-3 rounded-xl text-white transition ${
+              subscribed
+                ? "bg-green-600 cursor-not-allowed"
+                : "bg-[#111] hover:bg-black"
+            }`}
+          >
+            {subscribed ? "You're on the list ✅" : "Notify Me"}
+          </button>
+        </motion.div>
+
+        {/* SUBTEXT */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1 }}
+          className="mt-3 text-sm text-gray-400"
+        >
+          No spam. Just early access.
+        </motion.p>
+
+        {/* FOOTER */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.3 }}
+          className="mt-12 text-xs text-gray-400"
+        >
+          © {new Date().getFullYear()} Buddhimani AI
+        </motion.p>
+
+      </div>
+    </div>
+  );
 }
-
-export default App
